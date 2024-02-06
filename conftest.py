@@ -1,19 +1,17 @@
 import requests
-import random
-import string
 import pytest
 
 from data import UrlData
+from helpers import Helper
 
 
 # фикстура создания данных для регистрации курьера
 @pytest.fixture
 def create_courier_data():
-    def generate_random_string(length):
-        return ''.join((random.choice(string.ascii_lowercase + string.digits) for x in range(length)))
-    login = generate_random_string(10)
-    password = generate_random_string(10)
-    first_name = generate_random_string(10)
+
+    login = Helper.generate_random_string(10)
+    password = Helper.generate_random_string(10)
+    first_name = Helper.generate_random_string(10)
     payload = {"login": login, "password": password, "firstName": first_name}
     return payload
 
@@ -33,4 +31,4 @@ def login_and_delete_courier(create_courier_data, register_new_courier):
     response = requests.post(UrlData.url_login_courier, data=login_data)
     yield response
     id_courier = response.json()['id']
-    requests.delete(f"{UrlData.url_delete_courier}/{id_courier}")
+    requests.delete(f"{UrlData.url_delete_courier}{id_courier}")

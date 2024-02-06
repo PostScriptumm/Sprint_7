@@ -24,6 +24,6 @@ class TestOrder:
         login = login_and_delete_courier
         create_order = requests.post(UrlData.url_create_order, data=json.dumps(OrderData.order_data))
         get_order = requests.get(f"{UrlData.url_get_order}?t={create_order.json()['track']}")
-        requests.put(f"{UrlData.url_accept_order}/"f"{get_order.json()['order']['id']}?courierId={login.json()['id']}")
-        get_order_list = requests.get(f"{UrlData.url_get_order_list}?courierId={login.json()['id']}")
+        requests.put(f"{UrlData.url_accept_order}/{get_order.json()['order']['id']}?courierId={login.json()['id']}")
+        get_order_list = requests.get(f"{UrlData.url_get_order_list}{login.json()['id']}")
         assert get_order_list.json()['orders'][0]['id'] == get_order.json()['order']['id']
